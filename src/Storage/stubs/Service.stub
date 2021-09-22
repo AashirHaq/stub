@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Http\Services;
+use App\Models\{{modelName}};
+
+class {{modelName}}Service {
+
+    protected $model;
+    public function __construct()
+    {
+        $this->model = new {{modelName}}();
+    }
+
+    public function list()
+    {
+        $pagination = session()->get('pagination') ?? 10;
+        return $this->model->orderBy('id', 'desc')->paginate($pagination);
+    }
+
+    public function fetch($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
+    public function create($data)
+    {
+        extract($data);
+        $record = $this->model;
+        $record->save();
+
+        return $record;
+    }
+
+    public function edit($data, $id)
+    {
+        extract($data);
+        $record = $this->fetch($id);
+        $record->save();
+
+        return $record;
+    }
+
+    public function delete($id)
+    {
+        $record = $this->fetch($id);
+        return $record->delete();
+    }
+
+    public function all()
+    {
+        return $this->model->get();
+    }
+
+    public function count(){
+        return $this->model->count();
+    }
+
+}

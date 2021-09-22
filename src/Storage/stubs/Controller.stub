@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Requests\{{modelName}}Store;
+use App\Http\Controllers\Controller;
+use App\Http\Services\{{{modelName}}Service, RouterService};
+
+class {{modelName}}Controller extends Controller
+{
+    protected $entity, $router, $service, $routerService;
+
+    public function __construct(){
+        $this->entity = '{{modelNamePluralLowerCase}}';
+        $this->router = '{{modelNamePluralLowerCase}}.index';
+        $this->service = new {{modelName}}Service();
+        $this->routerService = new RouterService();
+    }
+
+    public function index()
+    {
+        $data = array();
+        $data['records'] = $this->service->list();
+        $data['entity'] = $this->entity;
+        return view('admin.'.$this->entity.'.index', $data);
+    }
+
+    public function create()
+    {
+        $data = array();
+        $data['entity'] = $this->entity;
+        return view('admin.'.$this->entity.'.create', $data);
+    }
+
+    public function store({{modelName}}Store $request)
+    {
+        $data = $request->validated();
+        $message = 'Record successfully created.';
+        $error = false;
+        try {
+            $this->service->create($data);
+        } catch (\Exception $e) {
+            $error = true;
+            $message = $e->getMessage();
+        }
+
+        if($error)
+            return $this->routerService->redirectBack($error, $message); 
+        return $this->routerService->redirect($this->router, $error, $message);
+    }
+
+    public function edit($id)
+    {
+        $data = array();
+        $record = $this->service->fetch($id);
+        $data['record'] = $record;
+        $data['entity'] = $this->entity;
+        return view('admin.'.$this->entity.'.edit', $data);
+    }
+
+    public function update({{modelName}}Store $request, $id)
+    {
+        $data = $request->validated();
+        $message = 'Record successfully updated.';
+        $error = false;
+        try {
+            $this->service->edit($data, $id);
+        } catch (\Exception $e) {
+            $error = true;
+            $message = $e->getMessage();
+        }
+
+        if($error)
+            return $this->routerService->redirectBack($error, $message); 
+        return $this->routerService->redirect($this->router, $error, $message);
+    }
+
+    public function destroy($id)
+    {
+        $error = false;
+        $message = 'Record successfully deleted.';
+        try {
+            $this->service->delete($id);
+        } catch (\Exception $e) {
+            $error = true;
+            $message = $e->getMessage();
+        }
+        if($error)
+            return $this->routerService->redirectBack($error, $message); 
+        return $this->routerService->redirect($this->router, $error, $message);
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "name": "aashirhaq/stub",
+    "description": "Generate CRUD of provided name including Controller Services and Views",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Aashirhaq\\Stub\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Aashir Haq",
+            "email": "aashirulhaque@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

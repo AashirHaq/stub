@@ -1,0 +1,35 @@
+@extends('admin.master')
+
+@section('title', Str::title($entity))
+
+@section('content')
+
+<div class="card shadow mb-4">
+    <form action="{{ route($entity.'.update', [Str::singular($entity) => $record->id]) }}" method="POST">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Edit</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @csrf
+                @method('PUT')
+                <div class="col-md-4 form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') ?? $record->name }}" />
+
+                    @include('admin.components.form-error', ['key' => 'name'])
+                </div>
+
+                @include('admin.components.status', ['value' => old('status') ?? $record->status])
+                @include('admin.components.form-error', ['key' => 'status'])
+            </div>
+        </div>
+        <div class="card-footer">
+            @include('admin.components.save-btn')
+        </div>
+    </form>
+</div>
+
+@include('admin.components.success', ['message' => session('success')])
+@include('admin.components.danger', ['message' => session('error')])
+@endsection
