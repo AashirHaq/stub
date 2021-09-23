@@ -16,5 +16,5 @@ composer require aashirhaq/stub
 ```
 ### Basic Usage
 
-1. Add `Aashirhaq\Stub\StubServiceProvider::class,` inside `config/app.php` under `Application Service Providers` sections.
+1. Add `Aashirhaq\Stub\StubServiceProvider::class,` inside `config/app.php` under `Package Service Providers` sections.
 2. Use ``` php artisan generate:skeleton {name-of-model} ``` to generate skeleton.
