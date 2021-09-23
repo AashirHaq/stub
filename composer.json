@@ -14,5 +14,14 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "orchestra/testbench": "^6.21"
+    },
+    "license": "unlicense",
+    "autoload-dev": {
+        "psr-4": {
+            "Aashirhaq\\Stub\\Tests\\": "tests"
+        }
+    }
 }
