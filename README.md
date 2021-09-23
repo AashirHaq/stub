@@ -1,6 +1,6 @@
 # Stub package
 
-[![Build Status](https://travis-ci.org/AashirHaq/stub.png?branch=master)](https://travis-ci.org/AashirHaq/stub)
+![Build Status](https://travis-ci.org/AashirHaq/stub.png?branch=master)  ![Github All Releases](https://img.shields.io/github/downloads/aashirhaq/stub/total.svg)
 
 ### About
 Generate CRUD of provided model name including Controller Services and Views
@@ -9,7 +9,7 @@ Generate CRUD of provided model name including Controller Services and Views
 
 ### Installation
 
-Faker requires PHP >= 7.4.
+**aashirhaq/stub** requires PHP >= 7.4.
 
 ```shell
 composer require aashirhaq/stub
