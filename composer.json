@@ -13,6 +13,9 @@
             "email": "aashirulhaque@gmail.com"
         }
     ],
+    "require": {
+        "php": "^7.4"
+    },
     "minimum-stability": "stable",
     "require-dev": {
         "phpunit/phpunit": "^9.5",
