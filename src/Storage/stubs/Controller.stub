@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\{{modelName}}Store;
 use App\Http\Controllers\Controller;
-use App\Http\Services\{{{modelName}}Service, RouterService};
+use App\Http\Services\{{modelName}}Service;
+use App\Http\Services\Admin\RouterService;
 
 class {{modelName}}Controller extends Controller
 {
     protected $entity, $router, $service, $routerService;
 
-    public function __construct(){
-        $this->entity = '{{modelNamePluralLowerCase}}';
-        $this->router = '{{modelNamePluralLowerCase}}.index';
+    public function __construct()
+    {
+        $this->entity = '{{modelNameSlugCase}}';
+        $this->router = '{{modelNameSlugCase}}.index';
         $this->service = new {{modelName}}Service();
         $this->routerService = new RouterService();
     }
@@ -45,7 +47,7 @@ class {{modelName}}Controller extends Controller
         }
 
         if($error)
-            return $this->routerService->redirectBack($error, $message); 
+            return $this->routerService->redirectBack($error, $message);
         return $this->routerService->redirect($this->router, $error, $message);
     }
 
@@ -71,7 +73,7 @@ class {{modelName}}Controller extends Controller
         }
 
         if($error)
-            return $this->routerService->redirectBack($error, $message); 
+            return $this->routerService->redirectBack($error, $message);
         return $this->routerService->redirect($this->router, $error, $message);
     }
 
@@ -86,7 +88,7 @@ class {{modelName}}Controller extends Controller
             $message = $e->getMessage();
         }
         if($error)
-            return $this->routerService->redirectBack($error, $message); 
+            return $this->routerService->redirectBack($error, $message);
         return $this->routerService->redirect($this->router, $error, $message);
     }
 }
