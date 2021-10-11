@@ -26,5 +26,11 @@
         "psr-4": {
             "Aashirhaq\\Stub\\Tests\\": "tests"
         }
+    },
+
+    "scripts": {
+        "post-autoload-dump": [
+            "@php ./vendor/bin/testbench package:discover --ansi"
+        ]
     }
 }

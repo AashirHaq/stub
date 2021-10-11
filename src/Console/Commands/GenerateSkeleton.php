@@ -39,7 +39,7 @@ class GenerateSkeleton extends Command
      */
     public function handle()
     {
-        $name = Str::title($this->argument('name'));
+        $name = Str::ucfirst(Str::singular($this->argument('name')));
 
         $this->controller($name);
         $this->model($name);
@@ -60,16 +60,16 @@ class GenerateSkeleton extends Command
         echo 'GENERATING CONTROLLER...!';
         echo PHP_EOL;
 
-        $controllerTemplate = str_replace(
+        $pluralName = Str::plural($name);
+
+        $template = str_replace(
             [
                 '{{modelName}}',
-                '{{modelNamePluralLowerCase}}',
-                '{{modelNameSingularLowerCase}}'
+                '{{modelNameSlugCase}}'
             ],
             [
                 $name,
-                strtolower(Str::plural($name)),
-                strtolower($name)
+                lcfirst($this->camel2dashed($pluralName))
             ],
             $this->getStub('Controller')
         );
@@ -77,7 +77,7 @@ class GenerateSkeleton extends Command
         if(!file_exists($path = app_path('/Http/Controllers/Admin')))
             mkdir($path, 0777, true);
 
-        file_put_contents(app_path("/Http/Controllers/Admin/{$name}Controller.php"), $controllerTemplate);
+        file_put_contents(app_path("/Http/Controllers/Admin/{$name}Controller.php"), $template);
 
         echo '****** DONE ******';
         echo PHP_EOL;
@@ -89,7 +89,7 @@ class GenerateSkeleton extends Command
         echo 'GENERATING MODEL...!';
         echo PHP_EOL;
 
-        $modelTemplate = str_replace(
+        $template = str_replace(
             [
                 '{{modelName}}',
                 '{{modelNamePluralLowerCase}}'
@@ -104,7 +104,7 @@ class GenerateSkeleton extends Command
         if(!file_exists($path = app_path('/Models')))
             mkdir($path, 0777, true);
 
-        file_put_contents(app_path("/Models/{$name}.php"), $modelTemplate);
+        file_put_contents(app_path("/Models/{$name}.php"), $template);
 
         echo '****** DONE ******';
         echo PHP_EOL;
@@ -116,7 +116,7 @@ class GenerateSkeleton extends Command
         echo 'GENERATING REQUEST...!';
         echo PHP_EOL;
 
-        $requestTemplate = str_replace(
+        $template = str_replace(
             ['{{modelName}}'],
             [$name],
             $this->getStub('Request')
@@ -125,7 +125,7 @@ class GenerateSkeleton extends Command
         if(!file_exists($path = app_path('/Http/Requests')))
             mkdir($path, 0777, true);
 
-        file_put_contents(app_path("/Http/Requests/{$name}Store.php"), $requestTemplate);
+        file_put_contents(app_path("/Http/Requests/{$name}Store.php"), $template);
         echo '****** DONE ******';
         echo PHP_EOL;
     }
@@ -136,7 +136,7 @@ class GenerateSkeleton extends Command
         echo 'GENERATING SERVICE...!';
         echo PHP_EOL;
 
-        $requestTemplate = str_replace(
+        $template = str_replace(
             ['{{modelName}}'],
             [$name],
             $this->getStub('Service')
@@ -145,7 +145,7 @@ class GenerateSkeleton extends Command
         if(!file_exists($path = app_path('/Http/Services')))
             mkdir($path, 0777, true);
 
-        file_put_contents(app_path("/Http/Services/{$name}Service.php"), $requestTemplate);
+        file_put_contents(app_path("/Http/Services/{$name}Service.php"), $template);
         echo '****** DONE ******';
         echo PHP_EOL;
     }
@@ -157,23 +157,25 @@ class GenerateSkeleton extends Command
         echo PHP_EOL;
 
         $pages = ['index', 'create', 'edit'];
-        if(!file_exists($path = resource_path('/views/admin/'.strtolower(Str::plural($this->hyphenConvert($name))))))
+
+        if(!file_exists($path = resource_path('/views/admin/'.strtolower(Str::plural($this->camel2dashed($name))))))
             mkdir($path, 0777, true);
+
         foreach($pages as $page){
-            $requestTemplate = str_replace(
+            $template = str_replace(
                 ['{{modelName}}'],
                 [$name],
                 $this->getStub($page)
             );
 
-            file_put_contents(resource_path("/views/admin/".strtolower(Str::plural($this->hyphenConvert($name))).'/'.$page.'.blade.php'), $requestTemplate);
-
+            file_put_contents(resource_path("/views/admin/".strtolower(Str::plural($this->camel2dashed($name))).'/'.$page.'.blade.php'), $template);
         }
         echo '****** DONE ******';
         echo PHP_EOL;
     }
 
-    protected function migration($name){
+    protected function migration($name)
+    {
         echo PHP_EOL;
         echo 'GENERATING MIGRATION...!';
         echo PHP_EOL;
@@ -184,7 +186,8 @@ class GenerateSkeleton extends Command
         echo PHP_EOL;
     }
 
-    protected function hyphenConvert($name){
+    protected function camel2dashed($name)
+    {
         return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $name));
     }
 }

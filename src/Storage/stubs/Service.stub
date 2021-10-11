@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Services;
+
 use App\Models\{{modelName}};
 
 class {{modelName}}Service {
@@ -51,8 +52,8 @@ class {{modelName}}Service {
         return $this->model->get();
     }
 
-    public function count(){
+    public function count()
+    {
         return $this->model->count();
     }
-
 }
