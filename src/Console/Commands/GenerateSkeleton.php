@@ -180,14 +180,14 @@ class GenerateSkeleton extends Command
         echo 'GENERATING MIGRATION...!';
         echo PHP_EOL;
 
-        Artisan::call('make:migration create_'.Str::plural(strtolower($name)).'_table --create='.Str::plural(strtolower($name)));
+        Artisan::call('make:migration create_'.Str::plural($this->camel2dashed($name)).'_table --create='.Str::plural($this->camel2dashed($name, '_')));
 
         echo '****** DONE ******';
         echo PHP_EOL;
     }
 
-    protected function camel2dashed($name)
+    protected function camel2dashed($name, $seperator = '-')
     {
-        return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $name));
+        return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1'.$seperator, $name));
     }
 }
