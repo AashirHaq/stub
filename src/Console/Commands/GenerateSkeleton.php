@@ -142,10 +142,10 @@ class GenerateSkeleton extends Command
             $this->getStub('Service')
         );
 
-        if(!file_exists($path = app_path('/Http/Services')))
+        if(!file_exists($path = app_path('/Http/Services/Admin')))
             mkdir($path, 0777, true);
 
-        file_put_contents(app_path("/Http/Services/{$name}Service.php"), $template);
+        file_put_contents(app_path("/Http/Services/Admin/{$name}Service.php"), $template);
         echo '****** DONE ******';
         echo PHP_EOL;
     }
@@ -186,8 +186,8 @@ class GenerateSkeleton extends Command
         echo PHP_EOL;
     }
 
-    protected function camel2dashed($name, $seperator = '-')
+    protected function camel2dashed($name, $separator = '-')
     {
-        return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1'.$seperator, $name));
+        return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1'.$separator, $name));
     }
 }

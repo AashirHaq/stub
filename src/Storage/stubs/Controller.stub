@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\{{modelName}}Store;
 use App\Http\Controllers\Controller;
-use App\Http\Services\{{modelName}}Service;
-use App\Http\Services\Admin\RouterService;
+use App\Http\Services\Admin\{{{modelName}}Service, RouterService};
+use Illuminate\Support\Facades\Log;
 
 class {{modelName}}Controller extends Controller
 {
@@ -14,24 +14,22 @@ class {{modelName}}Controller extends Controller
     public function __construct()
     {
         $this->entity = '{{modelNameSlugCase}}';
-        $this->router = '{{modelNameSlugCase}}.index';
+        $this->router = 'admin.{{modelNameSlugCase}}.index';
         $this->service = new {{modelName}}Service();
         $this->routerService = new RouterService();
     }
 
     public function index()
     {
-        $data = array();
-        $data['records'] = $this->service->list();
-        $data['entity'] = $this->entity;
-        return view('admin.'.$this->entity.'.index', $data);
+        $entity = $this->entity;
+        $records = $this->service->list();
+        return view('admin.'.$this->entity.'.index', compact('entity', 'records'));
     }
 
     public function create()
     {
-        $data = array();
-        $data['entity'] = $this->entity;
-        return view('admin.'.$this->entity.'.create', $data);
+        $entity = $this->entity;
+        return view('admin.'.$this->entity.'.create', compact('entity'));
     }
 
     public function store({{modelName}}Store $request)
@@ -39,9 +37,11 @@ class {{modelName}}Controller extends Controller
         $data = $request->validated();
         $message = 'Record successfully created.';
         $error = false;
+
         try {
             $this->service->create($data);
         } catch (\Exception $e) {
+            Log::error($e);
             $error = true;
             $message = $e->getMessage();
         }
@@ -53,11 +53,9 @@ class {{modelName}}Controller extends Controller
 
     public function edit($id)
     {
-        $data = array();
+        $entity = $this->entity;
         $record = $this->service->fetch($id);
-        $data['record'] = $record;
-        $data['entity'] = $this->entity;
-        return view('admin.'.$this->entity.'.edit', $data);
+        return view('admin.'.$this->entity.'.edit', compact('entity', 'record'));
     }
 
     public function update({{modelName}}Store $request, $id)
@@ -65,9 +63,11 @@ class {{modelName}}Controller extends Controller
         $data = $request->validated();
         $message = 'Record successfully updated.';
         $error = false;
+
         try {
             $this->service->edit($data, $id);
         } catch (\Exception $e) {
+            Log::error($e);
             $error = true;
             $message = $e->getMessage();
         }
@@ -81,12 +81,15 @@ class {{modelName}}Controller extends Controller
     {
         $error = false;
         $message = 'Record successfully deleted.';
+
         try {
             $this->service->delete($id);
         } catch (\Exception $e) {
+            Log::error($e);
             $error = true;
             $message = $e->getMessage();
         }
+
         if($error)
             return $this->routerService->redirectBack($error, $message);
         return $this->routerService->redirect($this->router, $error, $message);

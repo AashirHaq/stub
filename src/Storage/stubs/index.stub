@@ -2,61 +2,52 @@
 
 @section('title', Str::title($entity))
 
+@section('page-heading', Str::title($entity))
+
 @section('content')
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">{{ count($records) }} Record(s)</h6>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" width="100%" cellspacing="0">
+<div class="container-fluid">
+    <!-- Page Heading -->
+
+    <x-add-new-button :entity="$entity" />
+    <div class="card shadow mb-4">
+        <x-records-count :total="$records->total()" />
+        <div class="card-body">
+            <table id="dataTable" class="table table-bordered table-sm" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>S.No</th>
+                        <th>S No</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($records as $key => $record)
-                        <tr>
-                            <td>{{ $records->firstItem() + $key }}</td>
-                            <td>
-                                @include('admin.components.list-status-column', ['status' => $record->status])
-                            </td>
-                            <td>
-                                <div class="btn-group">
-                                    @include('admin.components.edit-btn', [
-                                        'id' => $record->id,
-                                        'entity' => Str::singular($entity)
-                                    ])
-                                    @include('admin.components.delete-btn', [
-                                        'id' => $record->id,
-                                        'entity' => Str::singular($entity)
-                                    ])
-                                </div>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td class="text-center">{{ $records->firstItem() + $key }}</td>
+                        <x-list-status-column :status="$record->status" />
+                        <td>
+                            <div class="btn-group">
+                                <x-edit-button :id="$record->id" :entity="Str::singular($entity)" />
+                                <x-delete-button :id="$record->id" :entity="Str::singular($entity)" />
+                            </div>
+                        </td>
+                    </tr>
                     @endforeach
 
-                    @if (count($records) <= 0)
-                        <tr>
-                            <td colspan="10" class="text-center">No records found</td>
-                        </tr>
-                    @endif
+                    <x-no-records :count="$records->count()" :colspan="$colspan ?? 10" />
                 </tbody>
             </table>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                {{ $records->links() }}
-            </div>
+        <!-- /.card-body -->
+        <div class="card-footer bg-white">
+            {{ $records->withQueryString()->links() }}
         </div>
     </div>
-</div>
+    <!-- /.card -->
 
-@include('admin.components.success', ['message' => session('success')])
-@include('admin.components.danger', ['message' => session('error')])
+</div>
+<x-toast title="Success" :message="Session::get('success')" type="success" />
+<x-toast title="Error" :message="Session::get('error')" type="error" />
 
 @endsection

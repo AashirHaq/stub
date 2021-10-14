@@ -2,33 +2,37 @@
 
 @section('title', Str::title($entity))
 
+@section('page-heading', Str::title($entity))
+
 @section('content')
 
-<div class="card shadow mb-4">
-    <form action="{{ route($entity.'.store') }}" method="POST">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Create</h6>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                @csrf
-                <div class="col-md-4 form-group">
-                    <label for="">Name</label>
-                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" />
+<div class="col-12">
+    <div class="card shadow mb-4">
+        <form method="POST" action="{{ route('admin.'.$entity.'.store') }}">
+            @csrf
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Create</h6>
+            </div>
+            <div class="card-body">
 
-                    @include('admin.components.form-error', ['key' => 'name'])
+                <div class="row">
+
+                    <div class="form-group col-md-4 required">
+                        <label for="name">Name</label>
+                        <input type="name" name="name" class="form-control form-control-sm  @error('name') is-invalid @enderror"
+                            id="name" placeholder="Enter Name" value="{{ old('name') }}" required>
+                        <x-form-error key="name" />
+                    </div>
+
+                    <x-status-field :value="Request::old('status') ?? 1" />
                 </div>
 
-                @include('admin.components.status', ['value' => old('status') ?? 1])
-                @include('admin.components.form-error', ['key' => 'status'])
             </div>
-        </div>
-        <div class="card-footer">
-            @include('admin.components.save-btn')
-        </div>
-    </form>
+            <div class="card-footer">
+                <x-save-button />
+            </div>
+        </form>
+    </div>
 </div>
 
-@include('admin.components.success', ['message' => session('success')])
-@include('admin.components.danger', ['message' => session('error')])
 @endsection
