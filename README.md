@@ -1,6 +1,7 @@
 # Stub package
 
-![Build Status](https://travis-ci.org/AashirHaq/stub.png?branch=master)  ![Github All Releases](https://img.shields.io/github/downloads/aashirhaq/stub/total.svg)
+![Build Status](https://travis-ci.org/AashirHaq/stub.png?branch=master)  ![Packagist Downloads](https://img.shields.io/packagist/dt/AashirHaq/stub?color=dark%20green&logo=github)
+
 
 ### About
 Generate CRUD of provided model name including Controller Services and Views
