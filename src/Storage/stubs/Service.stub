@@ -12,10 +12,10 @@ class {{modelName}}Service {
         $this->model = new {{modelName}}();
     }
 
-    public function list()
+    public function list($relations = array())
     {
         $pagination = session()->get('pagination') ?? 10;
-        return $this->model->orderBy('id', 'desc')->paginate($pagination);
+        return $this->model->with($relations)->latest()->paginate($pagination);
     }
 
     public function fetch($id)

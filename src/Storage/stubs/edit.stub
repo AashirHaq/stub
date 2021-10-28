@@ -18,11 +18,12 @@
             <div class="card-body">
 
                 <div class="row">
+
                     <div class="form-group col-md-4 required">
-                        <label for="name">Name</label>
-                        <input type="name" name="name" class="form-control form-control-sm  @error('name') is-invalid @enderror"
-                            id="name" placeholder="Enter Name" value="{{ old('name') ?? $record->name }}" required>
-                        <x-form-error key="name" />
+                        <label for="title">Title</label>
+                        <input type="text" name="title" class="form-control form-control-sm  @error('title') is-invalid @enderror"
+                            id="title" placeholder="Enter title" value="{{ old('title') ?? $record->title }}" required>
+                        <x-form-error key="title" />
                     </div>
 
                     <x-status-field :value="Request::old('status') ?? $record->status" />

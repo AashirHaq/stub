@@ -2,10 +2,21 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 
 class {{modelName}} extends Model
 {
     use SoftDeletes;
     protected $table = '{{modelNamePluralLowerCase}}';
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format(config('app.datetime_format'));
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format(config('app.datetime_format'));
+    }
 }
