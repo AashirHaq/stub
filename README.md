@@ -10,7 +10,7 @@ Generate CRUD of provided model name including Controller Services and Views
 
 ### Installation
 
-**aashirhaq/stub** requires PHP >= 7.4.
+**aashirhaq/stub** requires PHP >= 7.3.
 
 ```shell
 composer require aashirhaq/stub
